@@ -1,16 +1,10 @@
+#include "um.h"
 #include "uthash.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-
-struct array {
-  uint32_t id;
-  uint32_t *arr;
-  uint32_t size;
-  UT_hash_handle hh;
-};
 
 void allocate_array(struct array **arrays, uint32_t next_id, uint32_t size) {
   struct array *a;
@@ -35,22 +29,17 @@ void free_array(struct array **arrays, uint32_t id) {
   free(a);
 }
 
-int main(int argc, char **argv) {
-  if (argc < 2) {
-    fprintf(stderr, "Usage: %s <program>\n", argv[0]);
-    return EXIT_SUCCESS;
-  }
-
+uint32_t *read_program(char *filename) {
   struct stat file_stat;
-  if (stat(argv[1], &file_stat) == -1) {
-    fprintf(stderr, "Could not stat file %s\n", argv[1]);
-    return EXIT_FAILURE;
+  if (stat(filename, &file_stat) == -1) {
+    fprintf(stderr, "Could not stat file %s\n", filename);
+    exit(EXIT_FAILURE);
   }
 
-  FILE *fp = fopen(argv[1], "rb");
+  FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
-    fprintf(stderr, "Could not open file %s\n", argv[1]);
-    return EXIT_FAILURE;
+    fprintf(stderr, "Could not open file %s\n", filename);
+    exit(EXIT_FAILURE);
   }
 
   uint32_t *program = malloc(file_stat.st_size);
@@ -69,6 +58,10 @@ int main(int argc, char **argv) {
   }
   fclose(fp);
 
+  return program;
+}
+
+void run(uint32_t *program) {
   uint32_t reg[8] = {0};       // registers
   struct array *arrays = NULL; // arrays of platters
   uint32_t next_id = 1;        // next free index available for a new array
@@ -79,8 +72,6 @@ int main(int argc, char **argv) {
     uint32_t c = program[pc] & 7;
     uint32_t b = (program[pc] >> 3) & 7;
     uint32_t a = (program[pc] >> 6) & 7;
-    /* printf("\n%zu: %u (op=%u, a=%u, b=%u, c=%u)\n", pc, program[pc], opcode, a, b, c); */
-    /* printf("reg[a] = %u, reg[b] = %u, reg[c] = %u\n", reg[a], reg[b], reg[c]); */
     pc++;
     switch (opcode) {
     case 0:
@@ -111,7 +102,7 @@ int main(int argc, char **argv) {
       reg[a] = (~reg[b]) | (~reg[c]);
       break;
     case 7:
-      return EXIT_SUCCESS;
+      return;
     case 8:
       allocate_array(&arrays, next_id, reg[c]);
       reg[b] = next_id;
@@ -144,6 +135,16 @@ int main(int argc, char **argv) {
   }
   free(program);
   free(arrays);
+}
+
+int main(int argc, char **argv) {
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s <program>\n", argv[0]);
+    return EXIT_SUCCESS;
+  }
+
+  uint32_t *program = read_program(argv[1]);
+  run(program);
 
   return EXIT_SUCCESS;
 }

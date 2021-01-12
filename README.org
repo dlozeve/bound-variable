@@ -6,8 +6,8 @@ Solutions to the [[http://www.boundvariable.org/task.shtml][2006 ICFP Programmin
 
 ** Universal Machine
 
-The Universal Machine is implemented in [[um.c]]. Compile it with =make=
-and run it on a UM program:
+The Universal Machine is implemented in [[src/um.c]]. Compile it with
+=make= and run it on a UM program:
 
 #+begin_src sh
   ./um sandmark.umz # benchmark
