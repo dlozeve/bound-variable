@@ -2,6 +2,8 @@
 
 Solutions to the [[http://www.boundvariable.org/task.shtml][2006 ICFP Programming Contest]].
 
+*Warning: spoilers below!*
+
 ** Universal Machine
 
 The Universal Machine is implemented in [[um.c]]. Compile it with =make=
@@ -10,4 +12,34 @@ and run it on a UM program:
 #+begin_src sh
   ./um sandmark.umz # benchmark
   ./um codex.umz
+#+end_src
+
+Get the next program:
+
+#+begin_src sh
+  echo '(\\b.bb)(\\v.vv)06FHPVboundvarHRAk\np' | ./um codex.umz > codex_output
+  tail -c +196 codex_output > umix.um
+#+end_src
+
+** QVICKBASIC
+
+The fixed program is in [[hack.bas]]. We find the passwords of =ohmega=
+and =howie=.
+
+** Passwords found
+
+| user   | password      |
+|--------+---------------|
+| ohmega | bidirectional |
+| howie  | xyzzy         |
+| ftd    | falderal90    |
+
+** Publications found
+
+#+begin_src
+INTRO.LOG=200@999999|35e6f52e9bc951917c73af391e35e1d
+INTRO.MUA=5@999999|b9666432feff66e528a17fb69ae8e9a
+INTRO.UMD=10@999999|7005f80d6cd9b7b837802f1e58b11b8
+INTRO.QBC=10@999999|e6ee9c98b80b4dd04814a29a37bcba8
+INTRO.OUT=5@999999|69ca684f8c787cfe06694cb26f74a95
 #+end_src
