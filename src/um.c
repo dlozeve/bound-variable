@@ -133,8 +133,6 @@ void run(uint32_t *program) {
       break;
     }
   }
-  free(program);
-  free(arrays);
 }
 
 int main(int argc, char **argv) {

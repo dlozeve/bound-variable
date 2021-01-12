@@ -6,3 +6,6 @@ all: um
 
 um: src/um.c
 	$(CC) $^ -o $@ $(CFLAGS)
+
+clean:
+	rm -f um
