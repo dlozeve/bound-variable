@@ -14,6 +14,15 @@ and run it on a UM program:
   ./um codex.umz
 #+end_src
 
+Benchmark times:
+#+begin_src sh
+# time ./um sandmark.umz
+# without optimization
+./um sandmark.umz  86.20s user 0.00s system 99% cpu 1:26.20 total
+# with -O3
+./um sandmark.umz  30.06s user 0.00s system 99% cpu 30.065 total
+#+end_src
+
 Get the next program:
 
 #+begin_src sh
